@@ -1,0 +1,14 @@
+[{
+  "Name": "manipulator",
+  "Description": "Plugin to do verious kind of modifications to text in Micro",
+  "Tags": ["text", "manipulation"],
+  "Versions": [
+    {
+      "Version": "1.0.0",
+      "Url": "https://github.com/NicolaiSoeborg/manipulator-plugin/archive/v1.0.0.zip",
+      "Require": {
+        "micro": ">=1.0.0"
+      }
+    }
+  ]
+}]
