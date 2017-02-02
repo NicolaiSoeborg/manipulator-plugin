@@ -8,7 +8,7 @@ in your `bindings.json` file:
 
 ```json
 {
-    "Ctrl-Shift-L": "manipulator.lower"
+    "Ctrl-L": "manipulator.lower"
 }
 ```
 
@@ -16,12 +16,15 @@ You can also execute a command which will do the same thing as
 the binding:
 
 ```
-> upper
+> lower
 ```
 
-If you have a selection, the plugin will change all the lines
-selected.
+If you have a selection, the plugin will change all of the
+selection.
 
 The following commands currently exists:
- * `upper`: Converts to UPPERCASE
- * `lower`: Converts to lowercase
+ * `upper`: UPPERCASE
+ * `lower`: lowercase
+ * `reverse`: Reverses
+ * `base64enc`: Base64 encodes
+ * `base64dec`: Base64 decodes
