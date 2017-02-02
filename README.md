@@ -28,3 +28,8 @@ The following commands currently exists:
  * `reverse`: Reverses
  * `base64enc`: Base64 encodes
  * `base64dec`: Base64 decodes
+
+
+## Demo
+
+![Demo](demo.gif "Demo: Using a few of the commands")
