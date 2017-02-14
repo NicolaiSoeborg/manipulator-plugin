@@ -28,6 +28,14 @@ The following commands currently exists:
  * `reverse`: Reverses
  * `base64enc`: Base64 encodes
  * `base64dec`: Base64 decodes
+ * `rot13`: ROT-13
+ * `incNum`: Increase number by one
+ * `decNum`: Decrease number by one
+
+## Issues
+
+Please use the issue tracker if you have any issues or
+feature requests!
 
 
 ## Demo

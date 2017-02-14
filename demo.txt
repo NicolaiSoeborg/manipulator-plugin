@@ -1,0 +1,6 @@
+THIS TEXT SHOULDN'T BE ALL UPPERCASE
+Write const all uppercase, e.g. max_connections
+This should be two: 1 <== you can also decrease!
+
+base64(rot13(txt)):
+ZmhjcmUgZnJwZXJn

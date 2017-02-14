@@ -1,5 +1,6 @@
-VERSION = "1.1.0"
+VERSION = "1.2.0"
 
+-- Returns Loc-tuple w/ current marked text or whole line (begin, end)
 function getTextLoc()
     local v = CurView()
     local a, b, c = nil, nil, v.Cursor
@@ -16,6 +17,7 @@ function getTextLoc()
     return Loc(a.X, a.Y), Loc(b.X, b.Y)
 end
 
+-- Returns the current marked text or whole line
 function getText(a, b)
     local txt, buf = {}, CurView().Buf
 
@@ -38,6 +40,7 @@ function getText(a, b)
     return table.concat(txt, "\n")
 end
 
+-- Calls 'manipulator'-function on text matching 'regex'
 function manipulate(regex, manipulator)
     local v = CurView()
     local a, b = getTextLoc()
@@ -63,9 +66,41 @@ function manipulate(regex, manipulator)
     --v.Cursor.LastVisualX = v.Cursor:GetVisualX()
 end
 
-function upper() manipulate(".*", string.upper) end
-function lower() manipulate(".*", string.lower) end
+
+--[[ DEFINE FUNCTIONS ]]--
+
+function upper() manipulate("[%a]", string.upper) end
+MakeCommand("upper", "manipulator.upper")
+
+function lower() manipulate("[%a]", string.lower) end
+MakeCommand("lower", "manipulator.lower")
+
 function reverse() manipulate(".*", string.reverse) end
+MakeCommand("reverse", "manipulator.reverse")
+
+function rot13() manipulate("[%a]",
+    function (txt)
+        local result, lower, upper = {}, string.byte('a'), string.byte('A')
+        for c in txt:gmatch(".") do
+            local offset = string.lower(c) == c and lower or upper
+            local p = ((c:byte() - offset + 13) % 26) + offset
+            table.insert(result, string.char(p))
+        end
+        return table.concat(result, "")
+    end
+) end
+MakeCommand("rot13", "manipulator.rot13")
+
+function incNum() manipulate("[%d]",
+    function (txt) return tonumber(txt)+1 end
+) end
+MakeCommand("incNum", "manipulator.incNum")
+
+function decNum() manipulate("[%d]",
+    function (txt) return tonumber(txt)-1 end
+) end
+MakeCommand("decNum", "manipulator.decNum")
+
 
 -- Credit: http://lua-users.org/wiki/BaseSixtyFour
 function base64enc() manipulate(".*",
@@ -83,6 +118,8 @@ function base64enc() manipulate(".*",
         end)..({ '', '==', '=' })[#data%3+1])
     end
 ) end
+MakeCommand("base64enc", "manipulator.base64enc")
+
 function base64dec() manipulate(".*",
     function (data)
         local b='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
@@ -100,10 +137,7 @@ function base64dec() manipulate(".*",
         end))
     end
 ) end
-
-MakeCommand("upper", "manipulator.upper")
-MakeCommand("lower", "manipulator.lower")
-MakeCommand("reverse", "manipulator.reverse")
-MakeCommand("base64enc", "manipulator.base64enc")
 MakeCommand("base64dec", "manipulator.base64dec")
+
+
 AddRuntimeFile("manipulator", "help", "README.md")

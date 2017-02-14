@@ -1,11 +1,11 @@
 [{
   "Name": "manipulator",
   "Description": "Plugin to do various kind of modifications to text in Micro",
-  "Tags": ["text", "manipulation"],
+  "Tags": ["text", "manipulation", "base64", "rot13"],
   "Versions": [
     {
-      "Version": "1.1.0",
-      "Url": "https://github.com/NicolaiSoeborg/manipulator-plugin/archive/v1.1.0.zip",
+      "Version": "1.2.0",
+      "Url": "https://github.com/NicolaiSoeborg/manipulator-plugin/archive/v1.2.0.zip",
       "Require": {
         "micro": ">=1.0.0"
       }
