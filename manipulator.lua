@@ -1,4 +1,4 @@
-VERSION = "1.2.0"
+VERSION = "1.3.0"
 
 -- Returns Loc-tuple w/ current marked text or whole line (begin, end)
 function getTextLoc()
@@ -41,11 +41,13 @@ function getText(a, b)
 end
 
 -- Calls 'manipulator'-function on text matching 'regex'
-function manipulate(regex, manipulator)
+function manipulate(regex, manipulator, num)
+    local num = math.inf or num
     local v = CurView()
     local a, b = getTextLoc()
 
     local oldTxt = getText(a,b)
+
     local newTxt = string.gsub(oldTxt, regex, manipulator)
     v.Buf:Replace(a, b, newTxt)
 
@@ -139,5 +141,26 @@ function base64dec() manipulate(".*",
 ) end
 MakeCommand("base64dec", "manipulator.base64dec")
 
+-- Thanks marinopposite
+function capital() manipulate("[%a]", string.upper, 1) end
+MakeCommand("capital", "manipulator.capital")
+
+function brace()   manipulate(".*", "(%1)", 1) end
+MakeCommand("brace", "manipulator.brace")
+
+function curly()   manipulate(".*", "{%1}", 1) end
+MakeCommand("curly", "manipulator.curly")
+
+function square()  manipulate(".*", "[%1]", 1) end
+MakeCommand("square", "manipulator.square")
+
+function dquote()   manipulate(".*", '"%1"', 1) end
+MakeCommand("dquote", "manipulator.dquote" )
+
+function squote()  manipulate(".*", "'%1'", 1) end
+MakeCommand("squote", "manipulator.squote")
+
+function angle() manipulate(".*", "<%1>", 1) end
+MakeCommand("angle", "manipulator.angle")
 
 AddRuntimeFile("manipulator", "help", "README.md")

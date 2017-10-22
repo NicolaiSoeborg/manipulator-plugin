@@ -31,6 +31,13 @@ The following commands currently exists:
  * `rot13`: ROT-13
  * `incNum`: Increase number by one
  * `decNum`: Decrease number by one
+ * `capital`: Capitalize first letter
+ * `brace`: Adds brackets around selection 
+     * `curly`: Curly brackets (`{ }`)
+     * `square`: Square brackets (`[ ]`)
+	 * `angle`: Angle brackets (`< >`)
+     * `dquote`: Double quotes (`" "`)
+     * `squote`: Single quotes (`' '`)
 
 ## Issues
 
