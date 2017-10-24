@@ -1,4 +1,4 @@
-VERSION = "1.3.0"
+VERSION = "1.3.1"
 
 -- Returns Loc-tuple w/ current marked text or whole line (begin, end)
 function getTextLoc()
@@ -48,7 +48,7 @@ function manipulate(regex, manipulator, num)
 
     local oldTxt = getText(a,b)
 
-    local newTxt = string.gsub(oldTxt, regex, manipulator)
+    local newTxt = string.gsub(oldTxt, regex, manipulator, num)
     v.Buf:Replace(a, b, newTxt)
 
     -- Fix selection, if transformation changes text length (e.g. base64)
