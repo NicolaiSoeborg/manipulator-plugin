@@ -1,4 +1,4 @@
-VERSION = "1.3.1"
+VERSION = "1.3.2"
 
 -- Returns Loc-tuple w/ current marked text or whole line (begin, end)
 function getTextLoc()
@@ -141,23 +141,28 @@ function base64dec() manipulate(".*",
 ) end
 MakeCommand("base64dec", "manipulator.base64dec")
 
--- Thanks marinopposite
-function capital() manipulate("[%a]", string.upper, 1) end
+-- Credit: http://lua-users.org/wiki/StringRecipes
+function capital() manipulate("(%a)([%w_']*)",
+    function (first, rest)
+        return first:upper() .. rest:lower()
+    end
+) end
 MakeCommand("capital", "manipulator.capital")
 
-function brace()   manipulate(".*", "(%1)", 1) end
+-- Thanks marinopposite
+function brace() manipulate(".*", "(%1)", 1) end
 MakeCommand("brace", "manipulator.brace")
 
-function curly()   manipulate(".*", "{%1}", 1) end
+function curly() manipulate(".*", "{%1}", 1) end
 MakeCommand("curly", "manipulator.curly")
 
-function square()  manipulate(".*", "[%1]", 1) end
+function square() manipulate(".*", "[%1]", 1) end
 MakeCommand("square", "manipulator.square")
 
-function dquote()   manipulate(".*", '"%1"', 1) end
+function dquote() manipulate(".*", '"%1"', 1) end
 MakeCommand("dquote", "manipulator.dquote" )
 
-function squote()  manipulate(".*", "'%1'", 1) end
+function squote() manipulate(".*", "'%1'", 1) end
 MakeCommand("squote", "manipulator.squote")
 
 function angle() manipulate(".*", "<%1>", 1) end
