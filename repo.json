@@ -1,14 +1,36 @@
-[{
-  "Name": "manipulator",
-  "Description": "Plugin to do various kind of modifications to text in Micro",
-  "Tags": ["text", "manipulation", "base64", "rot13", "bracket", "Capital", "uppercase", "lowercase"],
-  "Versions": [
-    {
-      "Version": "1.3.2",
-      "Url": "https://github.com/NicolaiSoeborg/manipulator-plugin/archive/v1.3.2.zip",
-      "Require": {
-        "micro": ">=1.0.0"
+[
+  {
+    "Name": "manipulator",
+    "Description": "Plugin to do various kind of modifications to text in Micro",
+    "Website": "https://github.com/NicolaiSoeborg/manipulator-plugin",
+    "Tags": [
+      "text",
+      "manipulation",
+      "base64",
+      "rot13",
+      "bracket",
+      "Capital",
+      "Title",
+      "camel",
+      "snake",
+      "uppercase",
+      "lowercase"
+    ],
+    "Versions": [
+      {
+        "Version": "1.4.0",
+        "Url": "https://github.com/NicolaiSoeborg/manipulator-plugin/archive/v1.4.0.zip",
+        "Require": {
+          "micro": ">=2.0.0-1"
+        }
+      },
+      {
+        "Version": "1.3.2",
+        "Url": "https://github.com/NicolaiSoeborg/manipulator-plugin/archive/v1.3.2.zip",
+        "Require": {
+          "micro": ">=1.0.0"
+        }
       }
-    }
-  ]
-}]
+    ]
+  }
+]
