@@ -148,6 +148,7 @@ function capital() manipulate("(%a)([%w_']*)",
     end
 ) end
 MakeCommand("capital", "manipulator.capital")
+MakeCommand("title", "manipulator.capital")
 
 -- Thanks marinopposite
 function brace() manipulate(".*", "(%1)", 1) end
