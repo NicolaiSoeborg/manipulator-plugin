@@ -5,9 +5,9 @@ local config = import("micro/config")
 local buffer = import("micro/buffer")
 
 -- Returns Loc-tuple w/ current marked text or whole line (begin, end)
-function getTextLoc()
+function getTextLoc(c)
     local v = micro.CurPane()
-    local a, b, c = nil, nil, v.Cursor
+    local a, b = nil, nil
     if c:HasSelection() then
         if c.CurSelection[1]:GreaterThan(-c.CurSelection[2]) then
             a, b = c.CurSelection[2], c.CurSelection[1]
@@ -46,19 +46,21 @@ end
 
 -- Calls 'manipulator'-function on text matching 'regex'
 function manipulate(regex, manipulator, num)
-    local num = math.inf or num
-    local v = micro.CurPane()
-    local a, b = getTextLoc()
-
+  local num = math.inf or num
+  local v = micro.CurPane()
+  -- perform the replacement for each cursor
+  local cs = v.Buf:GetCursors()
+  for i=1, #cs do
+    local c = cs[i]
+    local a, b = getTextLoc(c)
     local oldTxt = getText(a,b)
-
     local newTxt = string.gsub(oldTxt, regex, manipulator, num)
+
     v.Buf:Replace(a, b, newTxt)
 
     -- Fix selection, if transformation changes text length (e.g. base64)
     local d = string.len(newTxt) - string.len(oldTxt)
     if d ~= 0 then
-        local c = v.Cursor
         if c:HasSelection() then
             if c.CurSelection[1]:GreaterThan(-c.CurSelection[2]) then
                 c.CurSelection[1].X = c.CurSelection[1].X - d
@@ -66,10 +68,10 @@ function manipulate(regex, manipulator, num)
                 c.CurSelection[2].X = c.CurSelection[2].X + d
             end
         end
-    end
-
-    --v.Cursor:Relocate()
-    --v.Cursor.LastVisualX = v.Cursor:GetVisualX()
+      end
+      --c:Relocate()
+      --c.LastVisualX = v.Cursor:GetVisualX()
+  end
 end
 
 
