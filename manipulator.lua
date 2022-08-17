@@ -1,9 +1,13 @@
-VERSION = "1.3.2"
+VERSION = "1.4.0"
+
+local micro = import("micro")
+local config = import("micro/config")
+local buffer = import("micro/buffer")
 
 -- Returns Loc-tuple w/ current marked text or whole line (begin, end)
-function getTextLoc()
-    local v = CurView()
-    local a, b, c = nil, nil, v.Cursor
+function getTextLoc(c)
+    local v = micro.CurPane()
+    local a, b = nil, nil
     if c:HasSelection() then
         if c.CurSelection[1]:GreaterThan(-c.CurSelection[2]) then
             a, b = c.CurSelection[2], c.CurSelection[1]
@@ -12,14 +16,14 @@ function getTextLoc()
         end
     else
         local eol = string.len(v.Buf:Line(c.Loc.Y))
-        a, b = c.Loc, Loc(eol, c.Y)
+        a, b = c.Loc, buffer.Loc(eol, c.Y)
     end
-    return Loc(a.X, a.Y), Loc(b.X, b.Y)
+    return buffer.Loc(a.X, a.Y), buffer.Loc(b.X, b.Y)
 end
 
 -- Returns the current marked text or whole line
 function getText(a, b)
-    local txt, buf = {}, CurView().Buf
+    local txt, buf = {}, micro.CurPane().Buf
 
     -- Editing a single line?
     if a.Y == b.Y then
@@ -42,19 +46,21 @@ end
 
 -- Calls 'manipulator'-function on text matching 'regex'
 function manipulate(regex, manipulator, num)
-    local num = math.inf or num
-    local v = CurView()
-    local a, b = getTextLoc()
-
+  local num = math.inf or num
+  local v = micro.CurPane()
+  -- perform the replacement for each cursor
+  local cs = v.Buf:GetCursors()
+  for i=1, #cs do
+    local c = cs[i]
+    local a, b = getTextLoc(c)
     local oldTxt = getText(a,b)
-
     local newTxt = string.gsub(oldTxt, regex, manipulator, num)
+
     v.Buf:Replace(a, b, newTxt)
 
     -- Fix selection, if transformation changes text length (e.g. base64)
     local d = string.len(newTxt) - string.len(oldTxt)
     if d ~= 0 then
-        local c = v.Cursor
         if c:HasSelection() then
             if c.CurSelection[1]:GreaterThan(-c.CurSelection[2]) then
                 c.CurSelection[1].X = c.CurSelection[1].X - d
@@ -62,23 +68,14 @@ function manipulate(regex, manipulator, num)
                 c.CurSelection[2].X = c.CurSelection[2].X + d
             end
         end
-    end
-
-    --v.Cursor:Relocate()
-    --v.Cursor.LastVisualX = v.Cursor:GetVisualX()
+      end
+      --c:Relocate()
+      --c.LastVisualX = v.Cursor:GetVisualX()
+  end
 end
 
 
 --[[ DEFINE FUNCTIONS ]]--
-
-function upper() manipulate("[%a]", string.upper) end
-MakeCommand("upper", "manipulator.upper")
-
-function lower() manipulate("[%a]", string.lower) end
-MakeCommand("lower", "manipulator.lower")
-
-function reverse() manipulate(".*", string.reverse) end
-MakeCommand("reverse", "manipulator.reverse")
 
 function rot13() manipulate("[%a]",
     function (txt)
@@ -91,18 +88,14 @@ function rot13() manipulate("[%a]",
         return table.concat(result, "")
     end
 ) end
-MakeCommand("rot13", "manipulator.rot13")
 
 function incNum() manipulate("[%d]",
     function (txt) return tonumber(txt)+1 end
 ) end
-MakeCommand("incNum", "manipulator.incNum")
 
 function decNum() manipulate("[%d]",
     function (txt) return tonumber(txt)-1 end
 ) end
-MakeCommand("decNum", "manipulator.decNum")
-
 
 -- Credit: http://lua-users.org/wiki/BaseSixtyFour
 function base64enc() manipulate(".*",
@@ -120,7 +113,6 @@ function base64enc() manipulate(".*",
         end)..({ '', '==', '=' })[#data%3+1])
     end
 ) end
-MakeCommand("base64enc", "manipulator.base64enc")
 
 function base64dec() manipulate(".*",
     function (data)
@@ -139,7 +131,6 @@ function base64dec() manipulate(".*",
         end))
     end
 ) end
-MakeCommand("base64dec", "manipulator.base64dec")
 
 -- Credit: http://lua-users.org/wiki/StringRecipes
 function capital() manipulate("(%a)([%w_']*)",
@@ -147,25 +138,24 @@ function capital() manipulate("(%a)([%w_']*)",
         return first:upper() .. rest:lower()
     end
 ) end
-MakeCommand("capital", "manipulator.capital")
 
--- Thanks marinopposite
-function brace() manipulate(".*", "(%1)", 1) end
-MakeCommand("brace", "manipulator.brace")
+function init()
+    config.MakeCommand("capital", capital, config.NoComplete)
+    -- Thanks marinopposite
+    config.MakeCommand("brace", function() manipulate(".*", "(%1)", 1) end, config.NoComplete)
+    config.MakeCommand("curly", function() manipulate(".*", "{%1}", 1) end, config.NoComplete)
+    config.MakeCommand("square", function() manipulate(".*", "[%1]", 1) end, config.NoComplete)
+    config.MakeCommand("dquote", function() manipulate(".*", '"%1"', 1) end, config.NoComplete)
+    config.MakeCommand("squote", function() manipulate(".*", "'%1'", 1) end, config.NoComplete)
+    config.MakeCommand("angle", function() manipulate(".*", "<%1>", 1) end, config.NoComplete)
+    config.MakeCommand("base64dec", base64dec, config.NoComplete)
+    config.MakeCommand("base64enc", base64enc, config.NoComplete)
+    config.MakeCommand("decNum", decNum, config.NoComplete)
+    config.MakeCommand("incNum", incNum, config.NoComplete)
+    config.MakeCommand("rot13", rot13, config.NoComplete)
+    config.MakeCommand("upper", function() manipulate("[%a]", string.upper) end, config.NoComplete)
+    config.MakeCommand("lower", function() manipulate("[%a]", string.lower) end, config.NoComplete)
+    config.MakeCommand("reverse", function() manipulate(".*", string.reverse) end, config.NoComplete)
 
-function curly() manipulate(".*", "{%1}", 1) end
-MakeCommand("curly", "manipulator.curly")
-
-function square() manipulate(".*", "[%1]", 1) end
-MakeCommand("square", "manipulator.square")
-
-function dquote() manipulate(".*", '"%1"', 1) end
-MakeCommand("dquote", "manipulator.dquote" )
-
-function squote() manipulate(".*", "'%1'", 1) end
-MakeCommand("squote", "manipulator.squote")
-
-function angle() manipulate(".*", "<%1>", 1) end
-MakeCommand("angle", "manipulator.angle")
-
-AddRuntimeFile("manipulator", "help", "README.md")
+    config.AddRuntimeFile("manipulator", config.RTHelp, "help/manipulator.md")
+end
