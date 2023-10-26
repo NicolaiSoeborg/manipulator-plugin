@@ -32,12 +32,13 @@ The following commands currently exists:
  * `incNum`: Increase number by one
  * `decNum`: Decrease number by one
  * `capital`: Capitalize First Letter
- * `brace`: Adds brackets around selection 
+ * `brace`: Adds brackets around selection
      * `curly`: Curly brackets (`{ }`)
      * `square`: Square brackets (`[ ]`)
 	 * `angle`: Angle brackets (`< >`)
      * `dquote`: Double quotes (`" "`)
      * `squote`: Single quotes (`' '`)
+     * `backtick`: Backticks (`` ` ` ``)
 
 ## Issues
 
