@@ -23,6 +23,11 @@ If you have a selection, the plugin will change all of the
 selection.
 
 The following commands currently exists:
+ * `camel`: camelCase
+ * `pascal`: PascalCase
+ * `kebab`: kebab-case
+ * `snake`: snake_case
+ * `screamingSnake`: SCREAMING_SNAKE_CASE
  * `upper`: UPPERCASE
  * `lower`: lowercase
  * `reverse`: Reverses
@@ -32,10 +37,11 @@ The following commands currently exists:
  * `incNum`: Increase number by one
  * `decNum`: Decrease number by one
  * `capital`: Capitalize First Letter
+ * `title`: Title Case
  * `brace`: Adds brackets around selection
      * `curly`: Curly brackets (`{ }`)
      * `square`: Square brackets (`[ ]`)
-	 * `angle`: Angle brackets (`< >`)
+     * `angle`: Angle brackets (`< >`)
      * `dquote`: Double quotes (`" "`)
      * `squote`: Single quotes (`' '`)
      * `backtick`: Backticks (`` ` ` ``)
@@ -44,7 +50,6 @@ The following commands currently exists:
 
 Please use the issue tracker if you have any issues or
 feature requests!
-
 
 ## Demo
 

@@ -139,6 +139,61 @@ function capital() manipulate("(%a)([%w_']*)",
     end
 ) end
 
+function title() manipulate(".*",
+    function (data)
+        return data:gsub("%a+", function(char) return char:sub(1, 1):upper() .. char:sub(2) end)
+    end
+
+) end
+
+function pascal() manipulate(".*",
+    function (data)
+        return data:gsub("^%a", string.upper):gsub("[_%s]+%a", string.upper):gsub("[_%s]","")
+    end
+) end
+
+function camel() manipulate(".*",
+    function (data)
+        return data:gsub("[_%s]+%a", string.upper):gsub("[_%s]",""):gsub("^%a", string.lower)
+    end
+) end
+
+function kebab() manipulate(".*",
+    function (data)
+        local function parseChar(char)
+            if char:match("%u") then return "-"..char:lower() end
+            if char:match("%s") then return "" end
+            return char:lower()
+        end
+
+        return data:gsub("^%a", string.lower):gsub(".", parseChar):gsub("%s", "-"):gsub("_", "-")
+    end
+) end
+
+function snake() manipulate(".*",
+    function (data)
+        local function parseChar(char)
+            if char:match("%u") then return "_"..char:lower() end
+            if char:match("%s") then return "" end
+            return char:lower()
+        end
+
+        return data:gsub("^%a", string.lower):gsub(".", parseChar):gsub("%s", "_")
+    end
+) end
+
+function screamingSnake() manipulate(".*",
+    function (data)
+        local function parseChar(char)
+            if char:match("%u") then return "_"..char:upper() end
+            if char:match("%s") then return "" end
+            return char:upper()
+        end
+
+        return data:gsub("^%a", string.lower):gsub(".", parseChar):gsub("%s", "_")
+    end
+) end
+
 function init()
     config.MakeCommand("capital", capital, config.NoComplete)
     -- Thanks marinopposite
@@ -157,6 +212,13 @@ function init()
     config.MakeCommand("upper", function() manipulate("[%a]", string.upper) end, config.NoComplete)
     config.MakeCommand("lower", function() manipulate("[%a]", string.lower) end, config.NoComplete)
     config.MakeCommand("reverse", function() manipulate(".*", string.reverse) end, config.NoComplete)
+    config.MakeCommand("title", title, config.NoComplete)
+    config.MakeCommand("pascal", pascal, config.NoComplete)
+    config.MakeCommand("camel", camel, config.NoComplete)
+    config.MakeCommand("kebab", kebab, config.NoComplete)
+    config.MakeCommand("snake", snake, config.NoComplete)
+    config.MakeCommand("screamingSnake", screamingSnake, config.NoComplete)
+
 
     config.AddRuntimeFile("manipulator", config.RTHelp, "help/manipulator.md")
 end
