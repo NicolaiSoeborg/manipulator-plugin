@@ -41,15 +41,15 @@ The following commands currently exists:
  * `brace`: Adds brackets around selection
      * `curly`: Curly brackets (`{ }`)
      * `square`: Square brackets (`[ ]`)
-	 * `angle`: Angle brackets (`< >`)
+     * `angle`: Angle brackets (`< >`)
      * `dquote`: Double quotes (`" "`)
      * `squote`: Single quotes (`' '`)
+     * `backtick`: Backticks (`` ` ` ``)
 
 ## Issues
 
 Please use the issue tracker if you have any issues or
 feature requests!
-
 
 ## Demo
 

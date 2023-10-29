@@ -1,4 +1,4 @@
-VERSION = "1.4.0"
+VERSION = "1.4.1"
 
 local micro = import("micro")
 local config = import("micro/config")
@@ -203,6 +203,7 @@ function init()
     config.MakeCommand("dquote", function() manipulate(".*", '"%1"', 1) end, config.NoComplete)
     config.MakeCommand("squote", function() manipulate(".*", "'%1'", 1) end, config.NoComplete)
     config.MakeCommand("angle", function() manipulate(".*", "<%1>", 1) end, config.NoComplete)
+    config.MakeCommand("backtick", function() manipulate(".*", "`%1`", 1) end, config.NoComplete)
     config.MakeCommand("base64dec", base64dec, config.NoComplete)
     config.MakeCommand("base64enc", base64enc, config.NoComplete)
     config.MakeCommand("decNum", decNum, config.NoComplete)
